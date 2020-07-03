@@ -1,6 +1,6 @@
 projects:
   CovidData:
-    schemaPath: src/graphql/schema.json
+    schemaPath: amplify/backend/api/CovidData/build/schema.graphql
     includes:
       - src/graphql/**/*.ts
     excludes:
