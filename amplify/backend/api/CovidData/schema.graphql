@@ -1,0 +1,20 @@
+type State @model {
+  id: ID!
+  name: String!
+  counties: [County] @connection(keyName: "byState", fields: ["id"])
+}
+
+type County @model @key(name: "byState", fields: ["stateId"]) {
+  id: ID!
+  name: String!
+  stateId: ID!
+  state: State @connection(fields: ["stateId"])
+  measurements: [Measurement] @connection(name: "CountyData")
+}
+
+type Measurement @model {
+  date: AWSDate!
+  confirmedCount: Int!
+  deathsCount: Int!
+  county: County @connection(name: "CountyData")
+}
