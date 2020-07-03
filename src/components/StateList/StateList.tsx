@@ -3,10 +3,17 @@ import styles from './StateList.module.css';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {listStates} from '../../graphql/queries';
+import {GraphQLResult} from '@aws-amplify/api';
 import { API, graphqlOperation } from 'aws-amplify'
+import { ListStatesQuery } from '../../API';
 
 interface StateData {
-  states: Array<String>
+  states: Array<IState>|undefined
+}
+
+interface IState {
+  id: string,
+  name: string,
 }
 
 export default class StateList extends React.Component<any, StateData> {
@@ -17,26 +24,28 @@ export default class StateList extends React.Component<any, StateData> {
 
   componentDidMount() {
     this.fetchStates();
-    console.log(this.state.states);
   }
 
   fetchStates() {
-    new Promise<any>((resolve, reject) => {
-      API.graphql(graphqlOperation(listStates));
-    }).then(data => {
-      this.setState(
-        {states: data.listStates.items}
-      );
-      console.log(data);
-    }).catch(err => console.error(err));
+    const listPromise: Promise<GraphQLResult<ListStatesQuery>> = 
+      API.graphql(graphqlOperation(listStates)) as Promise<GraphQLResult<ListStatesQuery>>;
+    
+    listPromise
+      .then(res => {
+        this.setState({states: res!.data!.listStates!.items?.map(s => {
+          return {id: s!.id, name: s!.name};
+        })});
+      })
+      .catch(err => console.error(err));
   }
 
   render() {
+    const {states} = this.state;
+    const listItems = states?.map(s => <ListItem key={s.id}>{s.name}</ListItem>);
     return <div className={styles.StateList}>
     StateList Component
     <List>
-      <ListItem>Florida</ListItem>
-      <ListItem>New York</ListItem>
+      {listItems}
     </List>
   </div>
   }
