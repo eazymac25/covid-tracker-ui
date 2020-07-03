@@ -1,20 +1,22 @@
-type State @model {
+type State @model @key(fields: ["id"]) {
   id: ID!
   name: String!
   counties: [County] @connection(keyName: "byState", fields: ["id"])
 }
 
-type County @model @key(name: "byState", fields: ["stateId"]) {
+type County @model 
+  @key(fields: ["id"])
+  @key(name: "byState", fields: ["stateId"]) {
   id: ID!
   name: String!
   stateId: ID!
   state: State @connection(fields: ["stateId"])
-  measurements: [Measurement] @connection(name: "CountyData")
+  metrics: [CaseMetric] @connection(fields: ["id"])
 }
 
-type Measurement @model {
-  date: AWSDate!
+type CaseMetric @model @key(fields: ["countyId", "measuredOn"]) {
+  countyId: ID!
+  measuredOn: AWSDate!
   confirmedCount: Int!
   deathsCount: Int!
-  county: County @connection(name: "CountyData")
 }

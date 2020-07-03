@@ -60,7 +60,7 @@ export type UpdateStateInput = {
 };
 
 export type DeleteStateInput = {
-  id?: string | null,
+  id: string,
 };
 
 export type CreateCountyInput = {
@@ -100,23 +100,22 @@ export type UpdateCountyInput = {
 };
 
 export type DeleteCountyInput = {
-  id?: string | null,
+  id: string,
 };
 
-export type CreateMeasurementInput = {
-  date: string,
+export type CreateCaseMetricInput = {
+  countyId: string,
+  measuredOn: string,
   confirmedCount: number,
   deathsCount: number,
-  measurementCountyId?: string | null,
 };
 
-export type ModelMeasurementConditionInput = {
-  date?: ModelStringInput | null,
+export type ModelCaseMetricConditionInput = {
   confirmedCount?: ModelIntInput | null,
   deathsCount?: ModelIntInput | null,
-  and?: Array< ModelMeasurementConditionInput | null > | null,
-  or?: Array< ModelMeasurementConditionInput | null > | null,
-  not?: ModelMeasurementConditionInput | null,
+  and?: Array< ModelCaseMetricConditionInput | null > | null,
+  or?: Array< ModelCaseMetricConditionInput | null > | null,
+  not?: ModelCaseMetricConditionInput | null,
 };
 
 export type ModelIntInput = {
@@ -131,15 +130,16 @@ export type ModelIntInput = {
   attributeType?: ModelAttributeTypes | null,
 };
 
-export type UpdateMeasurementInput = {
-  date?: string | null,
+export type UpdateCaseMetricInput = {
+  countyId: string,
+  measuredOn: string,
   confirmedCount?: number | null,
   deathsCount?: number | null,
-  measurementCountyId?: string | null,
 };
 
-export type DeleteMeasurementInput = {
-  id?: string | null,
+export type DeleteCaseMetricInput = {
+  countyId: string,
+  measuredOn: string,
 };
 
 export type ModelStateFilterInput = {
@@ -150,6 +150,12 @@ export type ModelStateFilterInput = {
   not?: ModelStateFilterInput | null,
 };
 
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type ModelCountyFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -159,13 +165,24 @@ export type ModelCountyFilterInput = {
   not?: ModelCountyFilterInput | null,
 };
 
-export type ModelMeasurementFilterInput = {
-  date?: ModelStringInput | null,
+export type ModelStringKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
+export type ModelCaseMetricFilterInput = {
+  countyId?: ModelIDInput | null,
+  measuredOn?: ModelStringInput | null,
   confirmedCount?: ModelIntInput | null,
   deathsCount?: ModelIntInput | null,
-  and?: Array< ModelMeasurementFilterInput | null > | null,
-  or?: Array< ModelMeasurementFilterInput | null > | null,
-  not?: ModelMeasurementFilterInput | null,
+  and?: Array< ModelCaseMetricFilterInput | null > | null,
+  or?: Array< ModelCaseMetricFilterInput | null > | null,
+  not?: ModelCaseMetricFilterInput | null,
 };
 
 export type CreateStateMutationVariables = {
@@ -271,11 +288,12 @@ export type CreateCountyMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    measurements:  {
-      __typename: "ModelMeasurementConnection",
+    metrics:  {
+      __typename: "ModelCaseMetricConnection",
       items:  Array< {
-        __typename: "Measurement",
-        date: string,
+        __typename: "CaseMetric",
+        countyId: string,
+        measuredOn: string,
         confirmedCount: number,
         deathsCount: number,
         createdAt: string,
@@ -310,11 +328,12 @@ export type UpdateCountyMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    measurements:  {
-      __typename: "ModelMeasurementConnection",
+    metrics:  {
+      __typename: "ModelCaseMetricConnection",
       items:  Array< {
-        __typename: "Measurement",
-        date: string,
+        __typename: "CaseMetric",
+        countyId: string,
+        measuredOn: string,
         confirmedCount: number,
         deathsCount: number,
         createdAt: string,
@@ -349,11 +368,12 @@ export type DeleteCountyMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    measurements:  {
-      __typename: "ModelMeasurementConnection",
+    metrics:  {
+      __typename: "ModelCaseMetricConnection",
       items:  Array< {
-        __typename: "Measurement",
-        date: string,
+        __typename: "CaseMetric",
+        countyId: string,
+        measuredOn: string,
         confirmedCount: number,
         deathsCount: number,
         createdAt: string,
@@ -366,106 +386,52 @@ export type DeleteCountyMutation = {
   } | null,
 };
 
-export type CreateMeasurementMutationVariables = {
-  input: CreateMeasurementInput,
-  condition?: ModelMeasurementConditionInput | null,
+export type CreateCaseMetricMutationVariables = {
+  input: CreateCaseMetricInput,
+  condition?: ModelCaseMetricConditionInput | null,
 };
 
-export type CreateMeasurementMutation = {
-  createMeasurement:  {
-    __typename: "Measurement",
-    date: string,
+export type CreateCaseMetricMutation = {
+  createCaseMetric:  {
+    __typename: "CaseMetric",
+    countyId: string,
+    measuredOn: string,
     confirmedCount: number,
     deathsCount: number,
-    county:  {
-      __typename: "County",
-      id: string,
-      name: string,
-      stateId: string,
-      state:  {
-        __typename: "State",
-        id: string,
-        name: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      measurements:  {
-        __typename: "ModelMeasurementConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type UpdateMeasurementMutationVariables = {
-  input: UpdateMeasurementInput,
-  condition?: ModelMeasurementConditionInput | null,
+export type UpdateCaseMetricMutationVariables = {
+  input: UpdateCaseMetricInput,
+  condition?: ModelCaseMetricConditionInput | null,
 };
 
-export type UpdateMeasurementMutation = {
-  updateMeasurement:  {
-    __typename: "Measurement",
-    date: string,
+export type UpdateCaseMetricMutation = {
+  updateCaseMetric:  {
+    __typename: "CaseMetric",
+    countyId: string,
+    measuredOn: string,
     confirmedCount: number,
     deathsCount: number,
-    county:  {
-      __typename: "County",
-      id: string,
-      name: string,
-      stateId: string,
-      state:  {
-        __typename: "State",
-        id: string,
-        name: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      measurements:  {
-        __typename: "ModelMeasurementConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type DeleteMeasurementMutationVariables = {
-  input: DeleteMeasurementInput,
-  condition?: ModelMeasurementConditionInput | null,
+export type DeleteCaseMetricMutationVariables = {
+  input: DeleteCaseMetricInput,
+  condition?: ModelCaseMetricConditionInput | null,
 };
 
-export type DeleteMeasurementMutation = {
-  deleteMeasurement:  {
-    __typename: "Measurement",
-    date: string,
+export type DeleteCaseMetricMutation = {
+  deleteCaseMetric:  {
+    __typename: "CaseMetric",
+    countyId: string,
+    measuredOn: string,
     confirmedCount: number,
     deathsCount: number,
-    county:  {
-      __typename: "County",
-      id: string,
-      name: string,
-      stateId: string,
-      state:  {
-        __typename: "State",
-        id: string,
-        name: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      measurements:  {
-        __typename: "ModelMeasurementConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -498,9 +464,11 @@ export type GetStateQuery = {
 };
 
 export type ListStatesQueryVariables = {
+  id?: string | null,
   filter?: ModelStateFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListStatesQuery = {
@@ -542,11 +510,12 @@ export type GetCountyQuery = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    measurements:  {
-      __typename: "ModelMeasurementConnection",
+    metrics:  {
+      __typename: "ModelCaseMetricConnection",
       items:  Array< {
-        __typename: "Measurement",
-        date: string,
+        __typename: "CaseMetric",
+        countyId: string,
+        measuredOn: string,
         confirmedCount: number,
         deathsCount: number,
         createdAt: string,
@@ -560,9 +529,11 @@ export type GetCountyQuery = {
 };
 
 export type ListCountysQueryVariables = {
+  id?: string | null,
   filter?: ModelCountyFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListCountysQuery = {
@@ -580,8 +551,8 @@ export type ListCountysQuery = {
         createdAt: string,
         updatedAt: string,
       } | null,
-      measurements:  {
-        __typename: "ModelMeasurementConnection",
+      metrics:  {
+        __typename: "ModelCaseMetricConnection",
         nextToken: string | null,
       } | null,
       createdAt: string,
@@ -591,62 +562,41 @@ export type ListCountysQuery = {
   } | null,
 };
 
-export type GetMeasurementQueryVariables = {
-  id: string,
+export type GetCaseMetricQueryVariables = {
+  countyId: string,
+  measuredOn: string,
 };
 
-export type GetMeasurementQuery = {
-  getMeasurement:  {
-    __typename: "Measurement",
-    date: string,
+export type GetCaseMetricQuery = {
+  getCaseMetric:  {
+    __typename: "CaseMetric",
+    countyId: string,
+    measuredOn: string,
     confirmedCount: number,
     deathsCount: number,
-    county:  {
-      __typename: "County",
-      id: string,
-      name: string,
-      stateId: string,
-      state:  {
-        __typename: "State",
-        id: string,
-        name: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      measurements:  {
-        __typename: "ModelMeasurementConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type ListMeasurementsQueryVariables = {
-  filter?: ModelMeasurementFilterInput | null,
+export type ListCaseMetricsQueryVariables = {
+  countyId?: string | null,
+  measuredOn?: ModelStringKeyConditionInput | null,
+  filter?: ModelCaseMetricFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
-export type ListMeasurementsQuery = {
-  listMeasurements:  {
-    __typename: "ModelMeasurementConnection",
+export type ListCaseMetricsQuery = {
+  listCaseMetrics:  {
+    __typename: "ModelCaseMetricConnection",
     items:  Array< {
-      __typename: "Measurement",
-      date: string,
+      __typename: "CaseMetric",
+      countyId: string,
+      measuredOn: string,
       confirmedCount: number,
       deathsCount: number,
-      county:  {
-        __typename: "County",
-        id: string,
-        name: string,
-        stateId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
@@ -737,11 +687,12 @@ export type OnCreateCountySubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    measurements:  {
-      __typename: "ModelMeasurementConnection",
+    metrics:  {
+      __typename: "ModelCaseMetricConnection",
       items:  Array< {
-        __typename: "Measurement",
-        date: string,
+        __typename: "CaseMetric",
+        countyId: string,
+        measuredOn: string,
         confirmedCount: number,
         deathsCount: number,
         createdAt: string,
@@ -771,11 +722,12 @@ export type OnUpdateCountySubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    measurements:  {
-      __typename: "ModelMeasurementConnection",
+    metrics:  {
+      __typename: "ModelCaseMetricConnection",
       items:  Array< {
-        __typename: "Measurement",
-        date: string,
+        __typename: "CaseMetric",
+        countyId: string,
+        measuredOn: string,
         confirmedCount: number,
         deathsCount: number,
         createdAt: string,
@@ -805,11 +757,12 @@ export type OnDeleteCountySubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    measurements:  {
-      __typename: "ModelMeasurementConnection",
+    metrics:  {
+      __typename: "ModelCaseMetricConnection",
       items:  Array< {
-        __typename: "Measurement",
-        date: string,
+        __typename: "CaseMetric",
+        countyId: string,
+        measuredOn: string,
         confirmedCount: number,
         deathsCount: number,
         createdAt: string,
@@ -822,91 +775,37 @@ export type OnDeleteCountySubscription = {
   } | null,
 };
 
-export type OnCreateMeasurementSubscription = {
-  onCreateMeasurement:  {
-    __typename: "Measurement",
-    date: string,
+export type OnCreateCaseMetricSubscription = {
+  onCreateCaseMetric:  {
+    __typename: "CaseMetric",
+    countyId: string,
+    measuredOn: string,
     confirmedCount: number,
     deathsCount: number,
-    county:  {
-      __typename: "County",
-      id: string,
-      name: string,
-      stateId: string,
-      state:  {
-        __typename: "State",
-        id: string,
-        name: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      measurements:  {
-        __typename: "ModelMeasurementConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnUpdateMeasurementSubscription = {
-  onUpdateMeasurement:  {
-    __typename: "Measurement",
-    date: string,
+export type OnUpdateCaseMetricSubscription = {
+  onUpdateCaseMetric:  {
+    __typename: "CaseMetric",
+    countyId: string,
+    measuredOn: string,
     confirmedCount: number,
     deathsCount: number,
-    county:  {
-      __typename: "County",
-      id: string,
-      name: string,
-      stateId: string,
-      state:  {
-        __typename: "State",
-        id: string,
-        name: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      measurements:  {
-        __typename: "ModelMeasurementConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnDeleteMeasurementSubscription = {
-  onDeleteMeasurement:  {
-    __typename: "Measurement",
-    date: string,
+export type OnDeleteCaseMetricSubscription = {
+  onDeleteCaseMetric:  {
+    __typename: "CaseMetric",
+    countyId: string,
+    measuredOn: string,
     confirmedCount: number,
     deathsCount: number,
-    county:  {
-      __typename: "County",
-      id: string,
-      name: string,
-      stateId: string,
-      state:  {
-        __typename: "State",
-        id: string,
-        name: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      measurements:  {
-        __typename: "ModelMeasurementConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,

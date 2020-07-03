@@ -24,11 +24,19 @@ export const getState = /* GraphQL */ `
 `;
 export const listStates = /* GraphQL */ `
   query ListStates(
+    $id: ID
     $filter: ModelStateFilterInput
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
-    listStates(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listStates(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
       items {
         id
         name
@@ -57,9 +65,10 @@ export const getCounty = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      measurements {
+      metrics {
         items {
-          date
+          countyId
+          measuredOn
           confirmedCount
           deathsCount
           createdAt
@@ -74,11 +83,19 @@ export const getCounty = /* GraphQL */ `
 `;
 export const listCountys = /* GraphQL */ `
   query ListCountys(
+    $id: ID
     $filter: ModelCountyFilterInput
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
-    listCountys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listCountys(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
       items {
         id
         name
@@ -89,7 +106,7 @@ export const listCountys = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        measurements {
+        metrics {
           nextToken
         }
         createdAt
@@ -99,51 +116,40 @@ export const listCountys = /* GraphQL */ `
     }
   }
 `;
-export const getMeasurement = /* GraphQL */ `
-  query GetMeasurement($id: ID!) {
-    getMeasurement(id: $id) {
-      date
+export const getCaseMetric = /* GraphQL */ `
+  query GetCaseMetric($countyId: ID!, $measuredOn: AWSDate!) {
+    getCaseMetric(countyId: $countyId, measuredOn: $measuredOn) {
+      countyId
+      measuredOn
       confirmedCount
       deathsCount
-      county {
-        id
-        name
-        stateId
-        state {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        measurements {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
   }
 `;
-export const listMeasurements = /* GraphQL */ `
-  query ListMeasurements(
-    $filter: ModelMeasurementFilterInput
+export const listCaseMetrics = /* GraphQL */ `
+  query ListCaseMetrics(
+    $countyId: ID
+    $measuredOn: ModelStringKeyConditionInput
+    $filter: ModelCaseMetricFilterInput
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
-    listMeasurements(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listCaseMetrics(
+      countyId: $countyId
+      measuredOn: $measuredOn
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
       items {
-        date
+        countyId
+        measuredOn
         confirmedCount
         deathsCount
-        county {
-          id
-          name
-          stateId
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }

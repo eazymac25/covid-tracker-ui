@@ -77,9 +77,10 @@ export const onCreateCounty = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      measurements {
+      metrics {
         items {
-          date
+          countyId
+          measuredOn
           confirmedCount
           deathsCount
           createdAt
@@ -107,9 +108,10 @@ export const onUpdateCounty = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      measurements {
+      metrics {
         items {
-          date
+          countyId
+          measuredOn
           confirmedCount
           deathsCount
           createdAt
@@ -137,9 +139,10 @@ export const onDeleteCounty = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      measurements {
+      metrics {
         items {
-          date
+          countyId
+          measuredOn
           confirmedCount
           deathsCount
           createdAt
@@ -152,82 +155,37 @@ export const onDeleteCounty = /* GraphQL */ `
     }
   }
 `;
-export const onCreateMeasurement = /* GraphQL */ `
-  subscription OnCreateMeasurement {
-    onCreateMeasurement {
-      date
+export const onCreateCaseMetric = /* GraphQL */ `
+  subscription OnCreateCaseMetric {
+    onCreateCaseMetric {
+      countyId
+      measuredOn
       confirmedCount
       deathsCount
-      county {
-        id
-        name
-        stateId
-        state {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        measurements {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
   }
 `;
-export const onUpdateMeasurement = /* GraphQL */ `
-  subscription OnUpdateMeasurement {
-    onUpdateMeasurement {
-      date
+export const onUpdateCaseMetric = /* GraphQL */ `
+  subscription OnUpdateCaseMetric {
+    onUpdateCaseMetric {
+      countyId
+      measuredOn
       confirmedCount
       deathsCount
-      county {
-        id
-        name
-        stateId
-        state {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        measurements {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
   }
 `;
-export const onDeleteMeasurement = /* GraphQL */ `
-  subscription OnDeleteMeasurement {
-    onDeleteMeasurement {
-      date
+export const onDeleteCaseMetric = /* GraphQL */ `
+  subscription OnDeleteCaseMetric {
+    onDeleteCaseMetric {
+      countyId
+      measuredOn
       confirmedCount
       deathsCount
-      county {
-        id
-        name
-        stateId
-        state {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        measurements {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }

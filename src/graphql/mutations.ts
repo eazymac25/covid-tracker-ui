@@ -89,9 +89,10 @@ export const createCounty = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      measurements {
+      metrics {
         items {
-          date
+          countyId
+          measuredOn
           confirmedCount
           deathsCount
           createdAt
@@ -122,9 +123,10 @@ export const updateCounty = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      measurements {
+      metrics {
         items {
-          date
+          countyId
+          measuredOn
           confirmedCount
           deathsCount
           createdAt
@@ -155,9 +157,10 @@ export const deleteCounty = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      measurements {
+      metrics {
         items {
-          date
+          countyId
+          measuredOn
           confirmedCount
           deathsCount
           createdAt
@@ -170,91 +173,46 @@ export const deleteCounty = /* GraphQL */ `
     }
   }
 `;
-export const createMeasurement = /* GraphQL */ `
-  mutation CreateMeasurement(
-    $input: CreateMeasurementInput!
-    $condition: ModelMeasurementConditionInput
+export const createCaseMetric = /* GraphQL */ `
+  mutation CreateCaseMetric(
+    $input: CreateCaseMetricInput!
+    $condition: ModelCaseMetricConditionInput
   ) {
-    createMeasurement(input: $input, condition: $condition) {
-      date
+    createCaseMetric(input: $input, condition: $condition) {
+      countyId
+      measuredOn
       confirmedCount
       deathsCount
-      county {
-        id
-        name
-        stateId
-        state {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        measurements {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
   }
 `;
-export const updateMeasurement = /* GraphQL */ `
-  mutation UpdateMeasurement(
-    $input: UpdateMeasurementInput!
-    $condition: ModelMeasurementConditionInput
+export const updateCaseMetric = /* GraphQL */ `
+  mutation UpdateCaseMetric(
+    $input: UpdateCaseMetricInput!
+    $condition: ModelCaseMetricConditionInput
   ) {
-    updateMeasurement(input: $input, condition: $condition) {
-      date
+    updateCaseMetric(input: $input, condition: $condition) {
+      countyId
+      measuredOn
       confirmedCount
       deathsCount
-      county {
-        id
-        name
-        stateId
-        state {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        measurements {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
   }
 `;
-export const deleteMeasurement = /* GraphQL */ `
-  mutation DeleteMeasurement(
-    $input: DeleteMeasurementInput!
-    $condition: ModelMeasurementConditionInput
+export const deleteCaseMetric = /* GraphQL */ `
+  mutation DeleteCaseMetric(
+    $input: DeleteCaseMetricInput!
+    $condition: ModelCaseMetricConditionInput
   ) {
-    deleteMeasurement(input: $input, condition: $condition) {
-      date
+    deleteCaseMetric(input: $input, condition: $condition) {
+      countyId
+      measuredOn
       confirmedCount
       deathsCount
-      county {
-        id
-        name
-        stateId
-        state {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        measurements {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
